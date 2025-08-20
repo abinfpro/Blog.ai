@@ -4,6 +4,7 @@ import Footer from "../../Components/Footer";
 import axios from "axios";
 
 export default function AddBlog() {
+  const [data, setdata] = useState([])
   const [formdata, setformdata] = useState({
     title: "",
     description: "",
@@ -24,14 +25,18 @@ export default function AddBlog() {
     data.append("title", formdata.title);
     data.append("description", formdata.description);
     data.append("image", formdata.image);
-    console.log(data);
+
+    // for (let [key, value] of data.entries()) {
+    //   console.log(key, value);
+    // }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/blog/addblog",
-        data
-      );
-    } catch (error) {}
+      const res = await axios.post("http://localhost:5000/blog/addblog", data);
+      setdata(res.data.data);
+  
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -73,7 +78,11 @@ export default function AddBlog() {
             onChange={(e) => handleChange(e)}
             className="w-full h-[1000px] border rounded-lg px-3 text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-400"
           />
-          <img className="object-contain rounded" />
+          <img
+            className="object-contain rounded w-full h-[200px]"
+            src={formdata.image ? URL.createObjectURL(formdata.image) : ""}
+            alt="Preview"
+          />
         </div>
       </div>
 
@@ -86,7 +95,6 @@ export default function AddBlog() {
           Add
         </button>
       </div>
-
       <Footer />
     </>
   );
