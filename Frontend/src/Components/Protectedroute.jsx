@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate, Outlet } from "react-router-dom";
-export default function Protectedroute() {
-  const [auth, setauth] = useState(null);
+
+export default function Protectedroute({ login }) {
+  const [auth, setAuth] = useState(null);
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -10,16 +12,25 @@ export default function Protectedroute() {
           withCredentials: true,
         });
         if (res.data.user) {
-          setauth(true);
+          setAuth(true);
+        } else {
+          setAuth(false);
         }
       } catch (error) {
-        setauth(false);
+        setAuth(false);
       }
     };
+
     checkAuth();
   }, []);
+
   if (auth === null) {
-    return <p>Checking authentication...</p>; // Loader while checking
+    return <p>Checking authentication...</p>; // loader
+  }
+
+  if (login) {
+    return auth ? <Navigate to="/" replace /> : <Outlet />;
   }
   return auth ? <Outlet /> : <Navigate to="/auth" replace />;
+
 }

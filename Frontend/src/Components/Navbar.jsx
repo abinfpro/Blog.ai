@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Navigate } from 'react-router-dom'
+import axios from 'axios'
 
 export default function Navbar() {
   const navigate = useNavigate()
