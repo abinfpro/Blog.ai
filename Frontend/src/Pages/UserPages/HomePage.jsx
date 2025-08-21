@@ -9,8 +9,7 @@ export default function HomePage() {
 
   const getdata = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/blog/getblog");
-      console.log(res.data.data);
+      const res = await axios.get("http://localhost:5000/blog/getblog",{withCredentials:true});
       setdata(res.data.data);
     } catch (error) {}
   };
@@ -22,7 +21,7 @@ export default function HomePage() {
   return (
     <div>
       <Navbar />
-      <div className="grid grid-cols-1 h-screen sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         {data && data.length > 0 ? (
           data.map((item) => (
             <div

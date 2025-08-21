@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Navbar from "../../Components/Navbar";
 import Footer from "../../Components/Footer";
 import axios from "axios";
+import toast from "react-hot-toast";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function AddBlog() {
-  const [data, setdata] = useState([])
+  const navigate = useNavigate()
   const [formdata, setformdata] = useState({
     title: "",
     description: "",
@@ -26,13 +28,13 @@ export default function AddBlog() {
     data.append("description", formdata.description);
     data.append("image", formdata.image);
 
-    // for (let [key, value] of data.entries()) {
-    //   console.log(key, value);
-    // }
-
     try {
-      const res = await axios.post("http://localhost:5000/blog/addblog", data);
-      setdata(res.data.data);
+      const res = await axios.post("http://localhost:5000/blog/addblog", data,{
+        withCredentials:true
+      });
+      setformdata({title:"", description:"", image:null})
+      toast.success("Blog Add Sucessfully")
+      navigate("/")
   
     } catch (error) {
       console.log(error);
@@ -62,6 +64,7 @@ export default function AddBlog() {
               Description:
               <textarea
                 name="description"
+                value={formdata.description}
                 onChange={(e) => handleChange(e)}
                 className="mt-2 border rounded-lg w-full h-32 p-3 resize-none focus:outline-none focus:ring-2 focus:ring-teal-400"
               ></textarea>

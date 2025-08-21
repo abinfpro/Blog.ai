@@ -1,7 +1,18 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 export default function Navbar() {
+  const navigate = useNavigate()
+  const handleLogout = async()=>{
+    try {
+  const res = await axios.post("http://localhost:5000/auth/logout",{},{withCredentials: true})
+  navigate("/auth")
+    } catch (error) {
+      
+    }
+  }
+  
   return (
     <>
     <div className=' bg-gradient-to-r from-teal-800 to-gray-900 text-white py-10 flex justify-around w-[100%] '>
@@ -11,7 +22,7 @@ export default function Navbar() {
         <NavLink to="/addblog" className="hover:text-teal-300">Add Blog</NavLink>
         <NavLink to="/profile" className="hover:text-teal-300">Profile</NavLink>
         </div>
-        <button>Logout</button>
+        <button className='bg-black px-4 border rounded' onClick={handleLogout}>Logout</button>
     </div>
     </>
   )

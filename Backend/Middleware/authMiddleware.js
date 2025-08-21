@@ -8,8 +8,9 @@ const middleware = async (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SUPER_KEY);
-    req.user = decoded;
+    req.user = decoded;    
     next();
+    
   } catch (error) {
     return res.status(401).json({ message: "Invalid or expired token" });
   }

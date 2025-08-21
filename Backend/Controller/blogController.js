@@ -3,6 +3,9 @@
  
  const addBlog = async (req,res)=>{
     try {
+        const {id} = req.user
+        console.log(id);
+        
         const {title,description} = req.body
         const image = req.file
         
@@ -25,7 +28,7 @@
           const { data: publicUrlData } = supabase.storage
       .from("Blog.ai_bucket")
       .getPublicUrl(filename);
-      const response = await Blog.create({title,description,image:publicUrlData.publicUrl})
+      const response = await Blog.create({title,description,image:publicUrlData.publicUrl,author:id})
       return res.status(200).json({message:"Add Sucessfully", data:response})
     } catch (error) {
         return res.status(500).json(error)
@@ -34,11 +37,22 @@
 
  const getBlog = async(req,res)=>{
     try {
-        const response = await Blog.find()
+        const response = await Blog.find().sort({createdAt:-1})
         return res.status(200).json({data:response})
     } catch (error) {
         return res.status(400).json({message:"Server Error"})
     }
  }
 
- module.exports = {addBlog, getBlog} 
+ const userProfil = async (req,res)=>{
+    try {        
+        const {id} = req.user                
+        const response = await Blog.find({author:id})
+        return res.status(200).json({data:response})        
+           
+    } catch (error) {
+        return res.status(400).json({message:"Server Error"})
+    }  
+ }  
+
+ module.exports = {addBlog, getBlog, userProfil}
