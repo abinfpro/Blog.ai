@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 export default function Protectedroute({ login }) {
   const [auth, setAuth] = useState(null);
@@ -13,6 +13,7 @@ export default function Protectedroute({ login }) {
         });
         if (res.data.user) {
           setAuth(true);
+
         } else {
           setAuth(false);
         }
@@ -22,15 +23,14 @@ export default function Protectedroute({ login }) {
     };
 
     checkAuth();
-  }, []);
+  }, [login]);
 
   if (auth === null) {
-    return <p>Checking authentication...</p>; // loader
+    return <p>Checking authentication...</p>;
   }
 
   if (login) {
     return auth ? <Navigate to="/" replace /> : <Outlet />;
   }
   return auth ? <Outlet /> : <Navigate to="/auth" replace />;
-
 }
