@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 export default function Protectedroute({ login }) {
   const [auth, setAuth] = useState(null);
@@ -10,7 +10,7 @@ export default function Protectedroute({ login }) {
       try {
         const res = await axios.get("http://localhost:5000/auth/check-auth", {
           withCredentials: true,
-        });
+        });        
         if (res.data.user) {
           setAuth(true);
 

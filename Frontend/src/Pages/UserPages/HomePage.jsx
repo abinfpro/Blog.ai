@@ -3,6 +3,7 @@ import Footer from "../../Components/Footer";
 import Navbar from "../../Components/Navbar";
 import axios from "axios";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 export default function HomePage() {
   const [data, setdata] = useState([]);
@@ -40,9 +41,9 @@ export default function HomePage() {
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                   {item.description}
                 </p>
-                <button className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
-                  Read More
-                </button>
+                <NavLink to={`/viewblog/${item._id}`} state={{ blog: item }} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                  View
+                </NavLink>
               </div>
             </div>
           ))

@@ -1,17 +1,31 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import Footer from "../../Components/Footer";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AddBlog() {
-  const navigate = useNavigate()
+  // const [edit, setedit] = useState(false)
+  const location = useLocation();
+  const item = location.state?.item;
+
+  const navigate = useNavigate();
   const [formdata, setformdata] = useState({
     title: "",
     description: "",
     image: null,
   });
+
+  useEffect(() => {
+    if (item) {
+      setformdata({
+        title: item.title,
+        description: item.description,
+        image: item.image,
+      });
+    }
+  }, [item]);
 
   const handleChange = (e) => {
     if (e.target.type === "file") {
@@ -22,20 +36,39 @@ export default function AddBlog() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("title", formdata.title);
-    data.append("description", formdata.description);
-    data.append("image", formdata.image);
-
     try {
-      const res = await axios.post("http://localhost:5000/blog/addblog", data,{
-        withCredentials:true
-      });
-      setformdata({title:"", description:"", image:null})
-      toast.success("Blog Add Sucessfully")
-      navigate("/")
-  
+      if (item) {
+        const data = new FormData();
+        data.append("title", formdata.title);
+        data.append("description", formdata.description);
+        data.append("image", formdata.image);
+        const res = await axios.patch(
+          `http://localhost:5000/blog/blogupdate/${item._id}`,
+          data,
+          { withCredentials: true }
+        );
+        if (res.status == 200) {
+          setformdata({ title: "", description: "", image: null });
+          toast.success("BLOG UPDATED");
+          navigate("/");
+        }
+      } else {
+        e.preventDefault();
+        const data = new FormData();
+        data.append("title", formdata.title);
+        data.append("description", formdata.description);
+        data.append("image", formdata.image);
+        const res = await axios.post(
+          "http://localhost:5000/blog/addblog",
+          data,
+          {
+            withCredentials: true,
+          }
+        );
+        setformdata({ title: "", description: "", image: null });
+        toast.success("Blog Add Sucessfully");
+        navigate("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -83,7 +116,13 @@ export default function AddBlog() {
           />
           <img
             className="object-contain rounded w-full h-[200px]"
-            src={formdata.image ? URL.createObjectURL(formdata.image) : ""}
+            src={
+              formdata.image
+                ? typeof formdata.image === "string"
+                  ? formdata.image // existing URL
+                  : URL.createObjectURL(formdata.image) // new file
+                : ""
+            }
             alt="Preview"
           />
         </div>

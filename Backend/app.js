@@ -22,6 +22,6 @@ app.use("/blog",blog)
 app.listen(process.env.PORT,()=>{
     console.log(`Server started ${process.env.PORT}`);
     
+    DB()
 })
 
-DB()

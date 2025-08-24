@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import { useState } from "react";
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
 
@@ -57,8 +57,14 @@ const handleSubmit = async (e)=>{
         setformdata({name:"", email:"", password:""})  
         setsignup(false)           
         }        
-        if(res.status === 200){      
+        if(res.status === 200){  
+          const user = res.data.data           
+          if(user.role === "user"){
             navigate("/")
+          }   
+          else{
+            navigate("/admin")
+          }
         }
     } catch (error) {
         
