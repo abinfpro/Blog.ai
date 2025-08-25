@@ -7,6 +7,7 @@ const DB = require("../Backend/Connection/dbConnection")
 const admin = require("../Backend/Routes/adminRoute")
 const user = require("../Backend/Routes/userRoute") 
 const blog = require("../Backend/Routes/blogRoute")
+const ai = require("../Backend/Routes/openaiRoute")
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({extended:true}))
@@ -18,6 +19,7 @@ app.use(cors({
 app.use("/auth",user)
 app.use("/admin",admin)
 app.use("/blog",blog)
+app.use("/openai",ai)
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server started ${process.env.PORT}`);

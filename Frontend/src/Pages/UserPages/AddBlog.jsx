@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AddBlog() {
-  // const [edit, setedit] = useState(false)
   const location = useLocation();
   const item = location.state?.item;
 
@@ -74,6 +73,28 @@ export default function AddBlog() {
     }
   };
 
+
+  // openAi
+const handleAsk = async () => {
+  try {
+    const res = await axios.post("http://localhost:5000/openai/chat", {
+      messages: [
+        {
+          role: "user",
+          content: [{ type: "text", text: `${formdata.title}` }],
+        },
+      ],
+      
+    });
+
+    console.log(res.data, "AI Response");
+    // setReply(res.data.choices[0].message.content);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
   return (
     <>
       <Navbar />
@@ -136,6 +157,7 @@ export default function AddBlog() {
         >
           Add
         </button>
+        <button onClick={handleAsk} className=' rounded bg-black text-white hover:bg-teal-500 hover:text-black w-30 ' >Ai Image genetration</button>
       </div>
       <Footer />
     </>

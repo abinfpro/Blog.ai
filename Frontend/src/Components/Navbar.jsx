@@ -13,6 +13,7 @@ export default function Navbar() {
     }
   }
   
+
   return (
     <>
     <div className=' bg-gradient-to-r from-teal-800 to-gray-900 text-white py-10 flex justify-around w-[100%] '>
